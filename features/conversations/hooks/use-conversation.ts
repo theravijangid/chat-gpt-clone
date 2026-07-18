@@ -3,10 +3,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { queryKeys } from "../utils/query-keys"
 import { createConversation, deleteConverstaion, listConversationsList, updateConversation } from "../actions/conversation-action"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
-export function useConversation() {
+export function useConversations() {
     return useQuery({
         queryKey: queryKeys.conversations.all,
         queryFn: () => listConversationsList()
