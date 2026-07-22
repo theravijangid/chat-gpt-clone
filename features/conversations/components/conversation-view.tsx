@@ -24,15 +24,23 @@ export const ConversationView = ({ conversationId, initialMessages }: Conversati
 
     const queryClient = useQueryClient();
     const { data: conversations } = useConversations();
+    const personaRef = React.useRef("default");
+
+    const prepareSendMessagesRequest = React.useCallback(
+        ({ id, messages }: { id: string, messages: UIMessage[] }) => ({
+            body: {
+                id,
+                message: messages.at(-1),
+                personaId: personaRef.current
+            }
+        }),
+        []
+    );
 
     const transport = useMemo(() => new DefaultChatTransport({
         api: "/api/chat",
-        prepareSendMessagesRequest: ({ id, messages }) => ({
-            body: {
-                id, message: messages.at(-1)
-            }
-        })
-    }), []);
+        prepareSendMessagesRequest
+    }), [prepareSendMessagesRequest]);
 
     const { messages, sendMessage, status } = useChat({
         id: conversationId,
@@ -65,7 +73,10 @@ export const ConversationView = ({ conversationId, initialMessages }: Conversati
             )}
 
             <ChatComposer
-                onSend={(text) => {
+                onSend={(text, selectedPersonaId) => {
+                    if (selectedPersonaId) {
+                        personaRef.current = selectedPersonaId;
+                    }
                     void sendMessage({ text });
                 }}
                 isSending={status !== "ready"}

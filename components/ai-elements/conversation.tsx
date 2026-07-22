@@ -12,8 +12,7 @@ export type ConversationProps = ComponentProps<typeof StickToBottom>;
 
 export const Conversation = ({ className, ...props }: ConversationProps) => (
   <StickToBottom
-    // className={cn("relative flex-1 overflow-y-hidden", className)}
-    className={cn("mx-auto w-full max-w-3xl px-4 pb-4 md:px-6", className)}
+    className={cn("relative flex-1 min-h-0 overflow-y-auto", className)}
     initial="smooth"
     resize="smooth"
     role="log"
@@ -30,7 +29,11 @@ export const ConversationContent = ({
   ...props
 }: ConversationContentProps) => (
   <StickToBottom.Content
-    className={cn("flex flex-col gap-8 p-4", className)}
+    // className={cn("flex flex-col gap-8 p-4", className)}
+    className={cn(
+      "mx-auto w-full max-w-4xl flex flex-col gap-8 px-4 pb-4 md:px-6",
+      className
+    )}
     {...props}
   />
 );
